@@ -35,23 +35,28 @@ public class AuthenticationController {
     // -----HOME PAGE-----
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
+        // Dati di default per evitare NullPointerException
+        model.addAttribute("username", "Ospite");
+        model.addAttribute("isAdmin", false);
+
+        // Recupera l'autenticazione
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    
-    // Controlla se l'utente è loggato
-    if (authentication != null && authentication.isAuthenticated() && 
-        !(authentication instanceof AnonymousAuthenticationToken)) {
-            
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("username", userDetails.getUsername());
-        
-        // Controlliamo se ha il ruolo ADMIN
-        boolean isAdmin = userDetails.getAuthorities().stream()
-            .anyMatch(a -> a.getAuthority().equals("ADMIN") || a.getAuthority().equals("ROLE_ADMIN"));
-        
-        model.addAttribute("isAdmin", isAdmin);
-    }
-    
-    return "index"; // Ritorna index.html
+
+        // Se l'utente è loggato, aggiorniamo i dati
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            model.addAttribute("username", userDetails.getUsername());
+
+            // Controlla se è admin in modo sicuro
+            boolean isAdmin = userDetails.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ADMIN") || a.getAuthority().equals("ROLE_ADMIN"));
+
+            model.addAttribute("isAdmin", isAdmin);
+        }
+
+        return "index"; // Cerca templates/index.html
     }
 
     // -----REGISTRAZIONE (GET: Mostra il form)-----
@@ -63,17 +68,17 @@ public class AuthenticationController {
 
     // -----REGISTRAZIONE (POST: Salva i dati)-----
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("user") User user, 
-                               BindingResult bindingResult, 
-                               Model model) {
-        
+    public String registerUser(@Valid @ModelAttribute("user") User user,
+            BindingResult bindingResult,
+            Model model) {
+
         if (userRepository.existsByEmail(user.getEmail())) {//Controllo se l'email esiste già
             bindingResult.rejectValue("email", "error.user", "Questa email è già registrata");
         }
         if (bindingResult.hasErrors()) {
             return "formRegister";//Se ci sono errori di validazione (es. campi vuoti o email duplicata), ricarica la pagina
         }
- 
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));//Salvataggio - Cifriamo la password prima di salvare
         user.setRole("DEFAULT"); // Assegniamo il ruolo base
         user.setEnabled(true);   // Attiviamo l'utente
