@@ -41,6 +41,10 @@ public class Recipe {
     // Relazione N-1: Molte ricette hanno un solo autore
     @ManyToOne
     private User author;
+    
+    // Relazione N-1: Ogni ricetta appartiene a una categoria
+    @ManyToOne
+    private Category category;
 
     // Relazione 1-N: Una ricetta ha molti ingredienti
     // @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
@@ -107,6 +111,14 @@ public class Recipe {
     }
     public void setImageFileName(String imageFileName) {
         this.imageFileName = imageFileName;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override
