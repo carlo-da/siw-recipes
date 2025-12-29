@@ -23,6 +23,16 @@
         </div>
 
         <div class="mb-3">
+            <label class="form-label fw-bold">Categoria</label>
+            <select class="form-select" th:field="*{category}">
+                <option value="">-- Seleziona una categoria --</option>
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">
+                    Nome Categoria
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
             <label>Descrizione Breve</label>
             <textarea th:field="*{description}" class="form-control" rows="2"></textarea>
         </div>

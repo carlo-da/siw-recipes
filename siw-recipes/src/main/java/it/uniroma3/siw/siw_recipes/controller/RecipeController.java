@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.siw_recipes.model.Recipe;
 import it.uniroma3.siw.siw_recipes.model.User;
+import it.uniroma3.siw.siw_recipes.repository.CategoryRepository;
 import it.uniroma3.siw.siw_recipes.repository.UserRepository;
 import it.uniroma3.siw.siw_recipes.service.RecipeService;
 import it.uniroma3.siw.siw_recipes.util.FileUploadUtil;
@@ -28,9 +29,10 @@ public class RecipeController {
 
     @Autowired private RecipeService recipeService;
     @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+
 
     // -----VISUALIZZAZIONE PUBBLICA-----
-
     @GetMapping("/recipe/all")
     public String getRecipes(Model model) {
         model.addAttribute("recipes", recipeService.findAll());
@@ -45,10 +47,10 @@ public class RecipeController {
     }
 
     // ------GESTIONE OPERAZIONE DI INSERIMENTO (Solo Utenti Registrati)------
-
     @GetMapping("/recipe/form")
     public String getRecipeForm(Model model) {
         model.addAttribute("recipe", new Recipe());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "recipeForm";
     }
 
@@ -70,5 +72,13 @@ public class RecipeController {
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         
         return "redirect:/recipe/" + savedRecipe.getId();
+    }
+
+    @GetMapping("/recipe/form")
+    public String formNewRecipe(Model model) {
+        model.addAttribute("recipe", new Recipe());
+        model.addAttribute("categories", categoryRepository.findAll());
+        
+        return "recipeForm";
     }
 }

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title th:text="${recipe.title}">Dettaglio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body class="container py-5">
 
     <nav aria-label="breadcrumb">
@@ -18,11 +20,17 @@
         <div class="col-md-8">
             <h1 class="display-4" th:text="${recipe.title}">Titolo Ricetta</h1>
             <p class="lead text-muted" th:text="${recipe.description}">Descrizione breve</p>
-            
+
             <div class="mb-4">
                 <span class="badge bg-primary">Tempo: <span th:text="${recipe.cookTime}">0</span> min</span>
-                <span class="badge bg-warning text-dark">Difficoltà: <span th:text="${recipe.difficulty}">1</span>/5</span>
-                <span class="text-muted ms-2">Autore: <strong th:text="${recipe.author.name} + ' ' + ${recipe.author.surname}">Nome</strong></span>
+                <span class="badge bg-warning text-dark">Difficoltà: <span
+                        th:text="${recipe.difficulty}">1</span>/5</span>
+
+                <span th:if="${recipe.category}" class="badge bg-success"
+                    th:text="${recipe.category.name}">Categoria</span>
+
+                <span class="text-muted ms-2">Autore: <strong
+                        th:text="${recipe.author.name} + ' ' + ${recipe.author.surname}">Nome</strong></span>
             </div>
 
             <hr>
@@ -32,26 +40,21 @@
                 Testo del procedimento...
             </div>
         </div>
-        
+
         <div class="col-md-4">
             <div class="card shadow-sm">
-                
-                <img th:if="${recipe.imagePath}" 
-                     th:src="@{${recipe.imagePath}}" 
-                     class="card-img-top" 
-                     style="object-fit: cover; height: 300px;" 
-                     alt="Foto Ricetta">
-                
-                <img th:unless="${recipe.imagePath}" 
-                     src="https://via.placeholder.com/400x300?text=Nessuna+Foto" 
-                     class="card-img-top" 
-                     alt="Anteprima">
+
+                <img th:if="${recipe.imagePath}" th:src="@{${recipe.imagePath}}" class="card-img-top"
+                    style="object-fit: cover; height: 300px;" alt="Foto Ricetta">
+
+                <img th:unless="${recipe.imagePath}" src="https://via.placeholder.com/400x300?text=Nessuna+Foto"
+                    class="card-img-top" alt="Anteprima">
 
                 <div class="card-body">
                     <p class="card-text text-center text-muted" th:text="${recipe.title}">Didascalia</p>
                 </div>
             </div>
-            
+
             <div class="d-grid gap-2 mt-3">
                 <a href="/recipe/all" class="btn btn-secondary">Torna all'elenco</a>
             </div>
@@ -59,4 +62,5 @@
     </div>
 
 </body>
+
 </html>
