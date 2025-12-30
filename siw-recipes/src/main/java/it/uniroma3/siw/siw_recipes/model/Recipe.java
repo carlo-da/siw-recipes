@@ -53,6 +53,10 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Ingredient> ingredients = new ArrayList<>();
 
+    // Relazione 1-N: una ricetta ha molte recensioni
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
+
     public Recipe() {
     }
 
@@ -132,6 +136,14 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public List<Review> getReviews() { 
+        return reviews; 
+    }
+
+    public void setReviews(List<Review> reviews) { 
+        this.reviews = reviews; 
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(id, title);
