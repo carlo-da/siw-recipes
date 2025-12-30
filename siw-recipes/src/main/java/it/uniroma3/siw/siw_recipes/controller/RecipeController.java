@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.siw_recipes.model.Recipe;
+import it.uniroma3.siw.siw_recipes.model.Review;
 import it.uniroma3.siw.siw_recipes.model.User;
 import it.uniroma3.siw.siw_recipes.repository.CategoryRepository;
 import it.uniroma3.siw.siw_recipes.repository.UserRepository;
@@ -43,6 +44,7 @@ public class RecipeController {
     public String getRecipe(@PathVariable("id") Long id, Model model) {
         Recipe recipe = recipeService.findById(id);
         model.addAttribute("recipe", recipe);
+        model.addAttribute("review", new Review());
         return "recipeDetail";
     }
 
