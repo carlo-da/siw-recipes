@@ -72,6 +72,60 @@
             <div class="d-grid gap-2 mt-3">
                 <a href="/recipe/all" class="btn btn-secondary">Torna all'elenco</a>
             </div>
+            <div class="row mt-5 mb-5">
+        <div class="col-md-8">
+            <h3 class="border-bottom pb-2">Recensioni degli Utenti</h3>
+
+            <div class="mt-4">
+                <div th:each="rev : ${recipe.reviews}" class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0" th:text="${rev.title}">Titolo Recensione</h5>
+                            <span class="badge bg-warning text-dark border border-warning">
+                                <span th:text="${rev.score}">5</span>/5 ⭐
+                            </span>
+                        </div>
+                        <h6 class="card-subtitle mt-2 text-muted small">
+                            Scritto da: <span th:text="${rev.author.name}">Nome Autore</span>
+                        </h6>
+                        <p class="card-text mt-3" th:text="${rev.text}">Testo della recensione...</p>
+                    </div>
+                </div>
+                
+                <div th:if="${recipe.reviews.isEmpty()}" class="alert alert-info">
+                    Nessuna recensione presente. Sii il primo a dire la tua!
+                </div>
+                <div class="card bg-light border-0 p-4 mt-5">
+                <h4>Lascia una Recensione</h4>
+                <p class="text-muted small">Condividi la tua opinione con la community.</p>
+                
+                <form th:action="@{'/recipe/' + ${recipe.id} + '/review'}" th:object="${review}" method="post">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Titolo</label>
+                        <input type="text" th:field="*{title}" class="form-control" placeholder="Es. Risultato perfetto!" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Voto</label>
+                        <select th:field="*{score}" class="form-select">
+                            <option value="5">⭐⭐⭐⭐⭐ - Eccellente</option>
+                            <option value="4">⭐⭐⭐⭐ - Molto Buona</option>
+                            <option value="3">⭐⭐⭐ - Media</option>
+                            <option value="2">⭐⭐ - Non mi è piaciuta</option>
+                            <option value="1">⭐ - Pessima</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">La tua esperienza</label>
+                        <textarea th:field="*{text}" class="form-control" rows="3" placeholder="Scrivi qui cosa ne pensi..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark">Pubblica Recensione</button>
+                </form>
+            </div>
+            </div>
         </div>
     </div>
 
