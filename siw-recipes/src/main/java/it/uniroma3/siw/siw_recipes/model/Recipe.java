@@ -1,13 +1,17 @@
 package it.uniroma3.siw.siw_recipes.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -23,18 +27,17 @@ public class Recipe {
     private String title;
 
     @Column(nullable = true, length = 64)
-    private String imageFileName; // Immagine 
+    private String imageFileName;  
 
     @Column(length = 2000)
-    private String description; // Descrizione breve
+    private String description; 
 
     @Column(length = 5000)
-    private String procedureText; // Procedimento completo
+    private String procedureText; 
 
     @Min(1)
-    private int cookTime; // Tempo di preparazione in minuti
+    private int cookTime; 
 
-    // Difficoltà da 1 a 5 
     @Min(1) @Max(5)
     private int difficulty;
 
@@ -47,8 +50,8 @@ public class Recipe {
     private Category category;
 
     // Relazione 1-N: Una ricetta ha molti ingredienti
-    // @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    // private List<Ingredient> ingredients;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public Recipe() {
     }
@@ -119,6 +122,14 @@ public class Recipe {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     @Override
