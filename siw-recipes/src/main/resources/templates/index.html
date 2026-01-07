@@ -5,19 +5,19 @@
 
     <nav th:replace="~{fragments/base :: navbar}"></nav>
 
-    <header class="position-relative text-center text-white mb-5" style="
-        background-image: url('https://images.unsplash.com/photo-1495521821378-860fd6987169?q=80&w=2000&auto=format&fit=crop'); 
-        background-size: cover; background-position: center; height: 500px;">
-        
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+    <header class="position-relative text-center mb-5" style="background-color: #64c276; height: 500px;">
         
         <div class="container position-relative h-100 d-flex flex-column justify-content-center align-items-center">
-            <h1 class="display-3 mb-3 fw-bold">Scopri il gusto autentico</h1>
-            <p class="lead mb-4 fs-4">Migliaia di ricette testate dalla nostra community per te.</p>
+            
+            <h1 class="display-3 mb-3 fw-bold text-white">Scopri il gusto autentico</h1>
+            
+            <p class="lead mb-4 fs-4 text-white opacity-75">Migliaia di ricette testate dalla nostra community per te.</p>
+            
             <div class="d-flex gap-3">
                 <a href="/recipe/all" class="btn btn-primary btn-lg shadow">Esplora Ricette</a>
+                
                 <div th:if="${#authentication.name != 'anonymousUser'}">
-                    <a href="/recipe/form" class="btn btn-light btn-lg shadow">Scrivi la tua</a>
+                    <a href="/recipe/form" class="btn btn-outline-light btn-lg">Scrivi la tua</a>
                 </div>
                 <div th:if="${#authentication.name == 'anonymousUser'}">
                     <a href="/register" class="btn btn-outline-light btn-lg">Unisciti a noi</a>
