@@ -1,63 +1,99 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Gestione Utenti - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container mt-5">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Pannello Amministrazione</h1>
-        <a href="/" class="btn btn-outline-secondary">Torna alla Home</a>
+<head th:replace="~{fragments/base :: commonHeader('Gestione Utenti')}"></head>
+
+<body>
+    <nav th:replace="~{fragments/base :: navbar}"></nav>
+
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="font-heading display-5 mb-0">Gestione Utenti 🛠️</h1>
+            <span class="badge bg-dark rounded-pill px-3 py-2" th:text="${users.size()} + ' Utenti Registrati'">0
+                Utenti</span>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-uppercase small text-muted">
+                        <tr>
+                            <th class="ps-4 py-3">Utente</th>
+                            <th class="py-3">Email</th>
+                            <th class="py-3">Ruolo</th>
+                            <th class="text-end pe-4 py-3">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}"
+                            th:classappend="${!user.enabled} ? 'table-secondary opacity-75' : ''">
+                            <td class="ps-4 py-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle d-flex justify-content-center align-items-center me-3"
+                                        th:classappend="${user.enabled} ? 'bg-primary bg-opacity-10 text-primary' : 'bg-secondary text-white'"
+                                        style="width: 40px; height: 40px; font-weight: bold;">
+                                        <span th:text="${#strings.substring(user.name, 0, 1)}">U</span>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark" th:text="${user.name} + ' ' + ${user.surname}">
+                                            Nome</div>
+                                        <div class="small">
+                                            <span th:text="'ID: ' + ${user.id}" class="text-muted">ID</span>
+                                            <span th:if="${!user.enabled}" class="badge bg-danger ms-1">BANNATO
+                                                🚫</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="text-secondary" th:text="${user.email}">email</td>
+
+                            <td>
+                                <span th:if="${user.role == 'ADMIN'}"
+                                    class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 rounded-pill">ADMIN</span>
+                                <span th:if="${user.role == 'DEFAULT'}"
+                                    class="badge bg-success bg-opacity-10 text-success border border-success px-3 rounded-pill">USER</span>
+                            </td>
+
+                            <td class="text-end pe-4">
+                                <div th:if="${user.role != 'ADMIN'}" class="d-flex justify-content-end gap-2">
+
+                                    <form th:if="${user.enabled}" th:action="@{'/admin/users/ban/' + ${user.id}}"
+                                        method="post">
+                                        <button type="submit" class="btn btn-sm btn-outline-warning text-dark"
+                                            title="Blocca Utente">
+                                            <i class="bi bi-slash-circle"></i> Blocca
+                                        </button>
+                                    </form>
+
+                                    <form th:unless="${user.enabled}" th:action="@{'/admin/users/enable/' + ${user.id}}"
+                                        method="post">
+                                        <button type="submit" class="btn btn-sm btn-success" title="Riattiva Utente">
+                                            <i class="bi bi-check-circle"></i> Riattiva
+                                        </button>
+                                    </form>
+
+                                    <form th:action="@{'/admin/users/delete/' + ${user.id}}" method="post">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Sei sicuro? Questa azione cancellerà anche tutte le sue ricette.');"
+                                            title="Elimina Definitivamente">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${users.isEmpty()}" class="p-5 text-center text-muted">
+                Nessun utente trovato.
+            </div>
+        </div>
     </div>
 
-    <div class="card shadow">
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">Elenco Utenti Registrati</h5>
-        </div>
-        <div class="card-body p-0">
-            <table class="table table-striped table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Ruolo</th>
-                        <th>Stato</th>
-                        <th class="text-end">Azioni</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="user : ${users}">
-                        <td th:text="${user.name} + ' ' + ${user.surname}">Nome Cognome</td>
-                        <td th:text="${user.email}">email@test.it</td>
-                        <td>
-                            <span class="badge" 
-                                  th:classappend="${user.role == 'ADMIN'} ? 'bg-danger' : 'bg-info'"
-                                  th:text="${user.role}">ROLE
-                            </span>
-                        </td>
-                        <td>
-                            <span th:if="${user.enabled}" class="text-success fw-bold">Attivo</span>
-                            <span th:unless="${user.enabled}" class="text-danger fw-bold">Bannato</span>
-                        </td>
-                        <td class="text-end">
-                            <div th:if="${user.role != 'ADMIN'}">
-                                
-                                <form th:if="${user.enabled}" th:action="@{'/admin/users/ban/' + ${user.id}}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Banna</button>
-                                </form>
-
-                                <form th:unless="${user.enabled}" th:action="@{'/admin/users/enable/' + ${user.id}}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-outline-success">Riattiva</button>
-                                </form>
-                                
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+    <footer th:replace="~{fragments/base :: footer}"></footer>
 </body>
+
 </html>

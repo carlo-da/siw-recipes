@@ -51,6 +51,16 @@ public class AdminController {
         }
         return "redirect:/admin/users";
     }
+
+    // ---------CANCELLAZIONE UTENET---------
+    @PostMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null && !user.getRole().equals("ADMIN")) {
+            userRepository.delete(user);
+        }
+        return "redirect:/admin/users";
+    }
     
     // ------CANCELLAZIONE RICETTA------
     @PostMapping("/recipe/delete/{id}")
