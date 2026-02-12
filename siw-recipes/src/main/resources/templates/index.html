@@ -36,9 +36,8 @@
             
             <div class="col-md-3 col-6" th:each="cat : ${categories}">
                 <a th:href="@{'/category/' + ${cat.id}}" class="text-decoration-none text-dark">
-                    <div class="p-4 border rounded-3 bg-white h-100 shadow-sm recipe-card text-center d-flex flex-column justify-content-center align-items-center">
-                        
-                        <div class="fs-1 mb-2">🍽️</div>
+                    <div class="p-4 border rounded-3 h-100 shadow-sm recipe-card text-center d-flex flex-column justify-content-center align-items-center" 
+                    style="background-color: #ffe5b4; border-color: #ffe5b4; transition: all 0.3s ease;">
                         
                         <h5 class="m-0 fw-bold text-uppercase" th:text="${cat.name}">Primi Piatti</h5>
                         <small class="text-muted mt-2">Scopri ricette &rarr;</small>

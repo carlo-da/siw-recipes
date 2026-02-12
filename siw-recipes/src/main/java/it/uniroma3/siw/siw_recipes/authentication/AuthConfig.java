@@ -1,5 +1,7 @@
 package it.uniroma3.siw.siw_recipes.authentication;
 
+import it.uniroma3.siw.siw_recipes.authentication.OAuth2LoginSuccessHandler;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class AuthConfig {
 
     @Autowired
-    private DataSource dataSource;
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private DataSource dataSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -48,6 +48,10 @@ public class AuthConfig {
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)
                 .permitAll()
+                )
+                .oauth2Login((oauth2) -> oauth2
+                .loginPage("/login") // Usa la tua pagina di login personalizzata
+                .successHandler(oAuth2LoginSuccessHandler) // Usa il gestore per salvare l'utente nel DB
                 )
                 .logout((logout) -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

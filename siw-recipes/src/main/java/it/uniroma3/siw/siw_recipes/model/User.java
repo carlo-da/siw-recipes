@@ -41,16 +41,6 @@ public class User {
     // Soddisfa il requisito: "bannare utenti registrati"
     private boolean enabled;
 
-    /* RELAZIONI */
-    // Un utente può scrivere molte ricette
-    // Useremo 'author' nella classe Recipe
-    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    // private List<Recipe> recipes;
-    
-    // Un utente può scrivere molte recensioni
-    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    // private List<Review> reviews;
-
     // COSTRUTTORI
     public User() {
         this.enabled = true; //L'utente è attivo per default

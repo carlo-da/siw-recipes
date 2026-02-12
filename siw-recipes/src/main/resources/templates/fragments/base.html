@@ -52,6 +52,9 @@
                             <li><a class="dropdown-item" href="/myRecipes">📕 Le mie Ricette</a></li>
                             <li><a class="dropdown-item" href="/recipe/form">🍳 Crea Ricetta</a></li>
                             <li sec:authorize="hasAuthority('ADMIN')">
+                                <a class="dropdown-item" href="/admin/categories">🏷️ Gestione Categorie</a>
+                            </li>
+                            <li sec:authorize="hasAuthority('ADMIN')">
                                 <a class="dropdown-item fw-bold text-danger" href="/admin/users">🛠️ Gestione Utenti</a>
                             </li>
                             <li>

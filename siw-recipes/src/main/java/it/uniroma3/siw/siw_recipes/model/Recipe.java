@@ -109,7 +109,13 @@ public class Recipe {
     }
     
     public String getImagePath() {
-        if (imageFileName == null || id == null) return null;
+        if (imageFileName == null) return null;
+        
+        if (imageFileName.startsWith("/")) {
+            return imageFileName;
+        } 
+        // è un upload utente
+        if (id == null) return null;
         return "/recipe-images/" + id + "/" + imageFileName;
     }
 

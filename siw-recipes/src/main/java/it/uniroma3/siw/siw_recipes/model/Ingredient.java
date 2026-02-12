@@ -9,6 +9,13 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Ingredient {
 
+    public Ingredient(){}
+
+    public Ingredient(String name, String quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

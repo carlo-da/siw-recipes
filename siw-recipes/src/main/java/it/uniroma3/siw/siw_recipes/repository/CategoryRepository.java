@@ -9,4 +9,5 @@ import it.uniroma3.siw.siw_recipes.model.Category;
 public interface CategoryRepository extends CrudRepository<Category, Long> {
     public List<Category> findAll();
     public boolean existsByName(String name);
+
 }

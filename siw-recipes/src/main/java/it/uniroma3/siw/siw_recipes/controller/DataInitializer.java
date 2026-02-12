@@ -1,3 +1,4 @@
+
 package it.uniroma3.siw.siw_recipes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,15 @@ import it.uniroma3.siw.siw_recipes.repository.UserRepository;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    // --- DEFINIZIONE UTENZE STATICHE ---
+    // --- DEFINIZIONE COSTANTI UTENTI ---
     private static final String ADMIN_EMAIL = "admin@siw.it";
-    private static final String ADMIN_PASSWORD = "admin";
-    
-    private static final String USER_EMAIL = "user@siw.it";
-    private static final String USER_PASSWORD = "password";
+    private static final String ADMIN_PASS = "admin";
+
+    private static final String MARIO_EMAIL = "mario@siw.it";
+    private static final String MARIO_PASS = "password";
+
+    private static final String LUIGI_EMAIL = "luigi@siw.it";
+    private static final String LUIGI_PASS = "password";
 
     @Autowired
     private UserRepository userRepository;
@@ -27,32 +31,37 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         
-        // Crea (o aggiorna) l'ADMIN
-        User admin = userRepository.findByEmail(ADMIN_EMAIL).orElse(new User());
-        // Se non esiste, impostiamo i dati anagrafici
-        if (admin.getId() == null) {
-            admin.setName("Admin");
-            admin.setSurname("Sistema");
-            admin.setEmail(ADMIN_EMAIL);
-            admin.setRole("ADMIN");
-            admin.setEnabled(true);
-            // La password la criptiamo SOLO in fase di creazione
-            admin.setPassword(passwordEncoder.encode(ADMIN_PASSWORD));
-            userRepository.save(admin);
-            System.out.println(">>> CONFIGURAZIONE: Utente ADMIN garantito (" + ADMIN_EMAIL + ")");
-        }
+        System.out.println(">>> DATA INITIALIZER: Controllo utenze...");
 
-        // Crea (o aggiorna) lo USER
-        User user = userRepository.findByEmail(USER_EMAIL).orElse(new User());
+        // 1. ADMIN
+        ensureUser("Admin", "Sistema", ADMIN_EMAIL, ADMIN_PASS, "ADMIN");
+
+        // 2. MARIO ROSSI (Utente standard)
+        ensureUser("Mario", "Rossi", MARIO_EMAIL, MARIO_PASS, "DEFAULT");
+
+        // 3. LUIGI VERDI (Utente standard)
+        ensureUser("Luigi", "Verdi", LUIGI_EMAIL, LUIGI_PASS, "DEFAULT");
+        
+        System.out.println(">>> DATA INITIALIZER: Fatto. Utenti pronti.");
+    }
+
+    private void ensureUser(String name, String surname, String email, String rawPassword, String role) {
+        User user = userRepository.findByEmail(email).orElse(new User());
+        
+        // Se l'ID è null, significa che l'utente non è nel DB
         if (user.getId() == null) {
-            user.setName("Mario");
-            user.setSurname("Rossi");
-            user.setEmail(USER_EMAIL);
-            user.setRole("DEFAULT");
+            user.setName(name);
+            user.setSurname(surname);
+            user.setEmail(email);
+            user.setRole(role);
             user.setEnabled(true);
-            user.setPassword(passwordEncoder.encode(USER_PASSWORD));
+            // Criptiamo la password
+            user.setPassword(passwordEncoder.encode(rawPassword));
+            
             userRepository.save(user);
-            System.out.println(">>> CONFIGURAZIONE: Utente USER garantito (" + USER_EMAIL + ")");
+            System.out.println(">>> CREATO UTENTE: " + name + " (" + email + ")");
+        } else {
+            System.out.println(">>> UTENTE ESISTENTE: " + email);
         }
     }
 }

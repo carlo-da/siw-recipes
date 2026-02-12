@@ -27,7 +27,7 @@ public class AdminController {
     @GetMapping("/users")
     public String adminUsers(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "admin/users"; // Creeremo questa vista dentro una sottocartella
+        return "admin/users"; // vista dentro una sottocartella
     }
 
     // ------BAN UTENTE-----
@@ -87,7 +87,7 @@ public class AdminController {
     
     @PostMapping("/categories/delete/{id}")
     public String deleteCategory(@PathVariable("id") Long id) {
-        // Per ora assumiamo di cancellare solo categorie vuote
+        // Assumo di cancellare solo categorie vuote
         categoryRepository.deleteById(id);
         return "redirect:/admin/categories";
     }
