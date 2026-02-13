@@ -70,7 +70,7 @@
                             class="w-100 h-100 object-fit-cover recipe-img" alt="Foto Ricetta">
                         
                         <img th:if="${recipe.imageFileName != null && !recipe.imageFileName.startsWith('/')}"
-                            th:src="@{'/recipe-images/' + ${recipe.id}}" 
+                            th:src="@{'/recipe-images/' + ${recipe.id} + '/' + ${recipe.imageFileName}}" 
                             class="w-100 h-100 object-fit-cover recipe-img" alt="Foto Ricetta">
                             
                         <img th:if="${recipe.imageFileName == null}"
