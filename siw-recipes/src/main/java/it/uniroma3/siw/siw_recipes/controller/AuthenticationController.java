@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import it.uniroma3.siw.siw_recipes.model.User;
 import it.uniroma3.siw.siw_recipes.repository.CategoryRepository;
+import it.uniroma3.siw.siw_recipes.repository.RecipeRepository;
 import it.uniroma3.siw.siw_recipes.repository.UserRepository;
 import jakarta.validation.Valid;
 
@@ -29,6 +30,9 @@ public class AuthenticationController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired 
+    private RecipeRepository recipeRepository;
 
     // -----LOGIN-----
     @GetMapping("/login")
@@ -59,7 +63,7 @@ public class AuthenticationController {
 
             model.addAttribute("isAdmin", isAdmin);
         }
-
+        model.addAttribute("recentRecipes", recipeRepository.findTop3ByOrderByIdDesc());
         return "index"; // Cerca templates/index.html
     }
 

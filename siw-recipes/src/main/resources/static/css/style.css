@@ -159,3 +159,19 @@ a { text-decoration: none; color: inherit; }
     border-color: var(--primary-hover);
     transform: translateY(-2px);
 }
+
+/* Effetto Zoom Immagini Home */
+.recipe-img {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .recipe-img {
+    transform: scale(1.05); 
+}
+
+.hover-overlay {
+    transition: opacity 0.3s ease;
+}
+.card:hover .hover-overlay {
+    opacity: 1 !important;
+}

@@ -54,13 +54,42 @@
 
     <section class="container mb-5">
         <div class="d-flex justify-content-between align-items-end mb-4">
-            <h2>Ultime dalla cucina</h2>
-            <a href="/recipe/all" class="text-decoration-none text-primary fw-bold">Vedi tutte &rarr;</a>
+            <h2 class="font-heading text-uppercase display-6 fw-bold ls-1">Ultime dalla cucina</h2>
+            <a href="/recipe/all" class="btn btn-outline-dark rounded-pill px-4">Vedi tutte &rarr;</a>
         </div>
-        
-        <div class="alert alert-light border text-center py-5">
-            <h4>Le ricette della community appariranno qui!</h4>
-            <p>Vai alla sezione <a href="/recipe/all">Ricette</a> per vederle tutte.</p>
+
+        <div class="row g-4">
+            
+            <div class="col-md-4" th:each="recipe : ${recentRecipes}">
+                <a th:href="@{'/recipe/' + ${recipe.id}}" class="d-block h-100 text-decoration-none">
+                    
+                    <div class="card border-0 shadow-sm overflow-hidden rounded-3 position-relative" style="height: 300px;">
+                        
+                        <img th:if="${recipe.imageFileName != null && recipe.imageFileName.startsWith('/')}"
+                            th:src="@{${recipe.imageFileName}}" 
+                            class="w-100 h-100 object-fit-cover recipe-img" alt="Foto Ricetta">
+                        
+                        <img th:if="${recipe.imageFileName != null && !recipe.imageFileName.startsWith('/')}"
+                            th:src="@{'/recipe-images/' + ${recipe.id}}" 
+                            class="w-100 h-100 object-fit-cover recipe-img" alt="Foto Ricetta">
+                            
+                        <img th:if="${recipe.imageFileName == null}"
+                            src="https://via.placeholder.com/400x300?text=Nuova+Ricetta" 
+                            class="w-100 h-100 object-fit-cover recipe-img" alt="Placeholder">
+
+                        <div class="card-img-overlay d-flex align-items-end justify-content-center opacity-0 hover-overlay transition-all">
+                            <span class="badge bg-dark bg-opacity-75 fs-6" th:text="${recipe.title}">Titolo</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-12" th:if="${recentRecipes.isEmpty()}">
+                <div class="alert alert-light border text-center py-5">
+                    <h4>Nessuna ricetta ancora inserita! 🍳</h4>
+                </div>
+            </div>
+
         </div>
     </section>
 

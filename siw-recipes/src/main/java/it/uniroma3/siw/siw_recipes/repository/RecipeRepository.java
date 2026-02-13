@@ -22,4 +22,6 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long>{
     public List<Recipe> findByTitleContainingIgnoreCase(String title);// Cerca per titolo 
     
     public List<Recipe> findByCategory(Category category);
+
+    public List<Recipe> findTop3ByOrderByIdDesc();
 }
